@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Secure Remote Voting</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="node.css" />
+    <meta name="color-scheme" content="light dark">
+</head>
+<body>
+    <header class="app-header">
+        <div class="container header-inner">
+            <h1 class="brand">Secure Remote Voting</h1>
+            <div class="header-actions">
+                <label class="switch" title="Toggle demo mode (shows OTP for testing)">
+                    <input id="demoMode" type="checkbox" />
+                    <span class="slider"></span>
+                </label>
+                <button id="themeToggle" class="btn btn-ghost" aria-label="Toggle theme">🌓</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="authSection" class="card">
+            <h2>Verify Voter</h2>
+            <p class="muted">Enter your voter ID and one-time passcode (OTP) to access the ballot.</p>
+            <form id="authForm" class="grid form-grid" autocomplete="off">
+                <div class="field">
+                    <label for="voterId">Voter ID</label>
+                    <input id="voterId" name="voterId" type="text" inputmode="text" required placeholder="e.g. VOTER-1234" />
+                </div>
+                <div class="field">
+                    <label for="email">Email (for OTP)</label>
+                    <input id="email" name="email" type="text" inputmode="email" placeholder="you@example.com" />
+                </div>
+                <div class="field otp-field">
+                    <label for="otp">OTP</label>
+                    <div class="otp-inline">
+                        <input id="otp" name="otp" type="text" inputmode="numeric" pattern="\\d{6}" minlength="6" maxlength="6" required placeholder="6-digit code" />
+                        <button id="requestOtp" type="button" class="btn btn-secondary">Request OTP</button>
+                    </div>
+                    <small id="otpHint" class="muted hidden"></small>
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn">Verify</button>
+                </div>
+            </form>
+            <div id="authMsg" role="status" class="msg"></div>
+        </section>
+
+        <section id="ballotSection" class="card hidden" aria-hidden="true">
+            <h2>Your Ballot</h2>
+            <p class="muted">Select exactly one candidate below. Your vote will be recorded with a tamper-evident receipt.</p>
+            <form id="ballotForm" class="ballot">
+                <fieldset>
+                    <legend>President</legend>
+                    <label class="choice">
+                        <input type="radio" name="candidate" value="Alice Johnson" required />
+                        <span>Alice Johnson</span>
+                    </label>
+                    <label class="choice">
+                        <input type="radio" name="candidate" value="Ben Carter" />
+                        <span>Ben Carter</span>
+                    </label>
+                    <label class="choice">
+                        <input type="radio" name="candidate" value="Chloe Singh" />
+                        <span>Chloe Singh</span>
+                    </label>
+                </fieldset>
+                <div class="actions">
+                    <button type="submit" class="btn">Submit Vote</button>
+                </div>
+            </form>
+            <div id="voteMsg" role="status" class="msg"></div>
+        </section>
+
+        <section id="resultsSection" class="card hidden" aria-hidden="true">
+            <h2>Results & Integrity</h2>
+            <div class="results-grid">
+                <div>
+                    <h3>Live Tally</h3>
+                    <ul id="tally" class="tally"></ul>
+                    <div class="actions-row">
+                        <button id="exportLedger" class="btn btn-secondary">Export Ledger</button>
+                        <label class="file-btn btn btn-ghost">
+                            Import Ledger
+                            <input id="importLedger" type="file" accept="application/json" />
+                        </label>
+                        <button id="verifyLedger" class="btn btn-ghost">Verify Integrity</button>
+                    </div>
+                    <div id="verifyMsg" class="msg"></div>
+                </div>
+                <div>
+                    <h3>Ledger (Hash Chain)</h3>
+                    <ol id="ledgerView" class="ledger"></ol>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <small>
+                Demo only: OTP is simulated. Ledger is tamper-evident (hash chain). For production, add a server and/or deploy a smart contract.
+            </small>
+        </div>
+    </footer>
+
+    <script src="script.js" defer></script>
+    <script src="server.js"></script>
+</body>
+</html>
+
+
